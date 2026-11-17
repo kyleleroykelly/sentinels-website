@@ -93,6 +93,23 @@ const redirect = absolute('/thanks/', Astro.site);
   </p>
 </form>
 
+<script>
+  // Prefill from a "Request this show" link: /book/?show=<title>&type=<audience>
+  const params = new URLSearchParams(window.location.search);
+  const show = params.get('show');
+  const type = params.get('type');
+  const typeOption: Record<string, string> = {
+    faire: 'Renaissance faire or festival',
+    library: 'Library program',
+    school: 'School program',
+    private: 'Private event',
+  };
+  const select = document.querySelector<HTMLSelectElement>('#event_type');
+  if (select && type && typeOption[type]) select.value = typeOption[type];
+  const message = document.querySelector<HTMLTextAreaElement>('#message');
+  if (message && show && !message.value) message.value = `I'm interested in: ${show}\n\n`;
+</script>
+
 <style>
   .booking {
     background: var(--paper);

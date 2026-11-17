@@ -32,16 +32,16 @@ type: faire                # faire, festival, library, school, private, or other
 times: Shows at 11am and 2pm   # optional
 ---
 
-Optional description. Shows on the Events page.
+Optional description. Shows on the Calendar page.
 ```
 
-Upcoming events appear on the home page (next three) and the Events page. Once an event's last day passes, it moves to "Past appearances" automatically. The site rebuilds every Monday morning to make that happen, or right away on any commit.
+Upcoming events appear on the home page (next three) and the Calendar page. Once an event's last day passes, it moves to "Past appearances" automatically. The site rebuilds every Monday morning to make that happen, or right away on any commit.
 
 To remove an event, delete its file.
 
-## Edit shows and programs
+## Edit shows and programs (the What We Offer page)
 
-Each show is a file in `src/content/shows/`. The `audience` field (`faire`, `library`, `school`, or `private`) decides which section it appears in, and `order` sets the order on the page.
+Each show is a file in `src/content/shows/`. The `audience` field (`faire`, `library`, `school`, or `private`) decides which section of the What We Offer page it appears in, and `order` sets the order. Each show gets a "Request this show" button that opens the booking form with the show already filled in.
 
 ## Add photos
 
@@ -105,7 +105,7 @@ The key is safe to have in a public repo. It only lets people send email to that
 2. In the domain's DNS settings, add these records:
    - Four `A` records for `@`: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
    - A `CNAME` record for `www` pointing to `kyleleroykelly.github.io`
-3. In `astro.config.mjs`, change `site` to `'https://sentinelsoftherose.com'` and `base` to `'/'`.
+3. In `astro.config.mjs`, change `SITE` to `'https://sentinelsoftherose.com'` and `BASE` to `''`.
 4. In `public/robots.txt`, change the sitemap URL to `https://sentinelsoftherose.com/sitemap-index.xml`.
 5. Create `public/CNAME` containing just `sentinelsoftherose.com`.
 6. Commit, then on GitHub go to Settings, then Pages, enter the custom domain, and tick "Enforce HTTPS" once it's offered.

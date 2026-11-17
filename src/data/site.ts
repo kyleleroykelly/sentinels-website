@@ -13,8 +13,8 @@ export const site = {
 
   // Social links. Leave `url` empty to hide a link.
   socials: [
-    { name: 'Facebook', url: '' /* PLACEHOLDER: paste the Facebook page URL */ },
-    { name: 'Instagram', url: '' /* PLACEHOLDER: paste the Instagram URL */ },
+    { name: 'Facebook', url: 'https://www.facebook.com/p/The-Sentinels-of-The-Rose-100076194217850/' },
+    { name: 'Instagram', url: 'https://www.instagram.com/thesentinelsoftherose/' },
     { name: 'YouTube', url: '' /* optional */ },
   ],
 
@@ -39,8 +39,8 @@ export const site = {
 export const nav = [
   { label: 'Home', path: '/' },
   { label: 'About', path: '/about/' },
-  { label: 'Shows', path: '/shows/' },
-  { label: 'Events', path: '/events/' },
+  { label: 'What We Offer', path: '/what-we-offer/' },
+  { label: 'Calendar', path: '/calendar/' },
   { label: 'Gallery', path: '/gallery/' },
   { label: 'Book Us', path: '/book/', cta: true },
 ];

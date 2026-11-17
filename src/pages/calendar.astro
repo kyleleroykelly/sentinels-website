@@ -1,0 +1,214 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EventCard from '../components/EventCard.astro';
+import { site } from '../data/site';
+import { href, today, isoDate, eventTypeLabel } from '../lib/util';
+
+// The Calendar lists dated public appearances: where people can come watch.
+// Bookable shows and programs live on the What We Offer page.
+
+const now = today();
+const all = await getCollection('events');
+const upcoming = all
+  .filter(({ data }) => (data.end ?? data.start) >= now)
+  .sort((a, b) => a.data.start.getTime() - b.data.start.getTime());
+const past = all
+  .filter(({ data }) => (data.end ?? data.start) < now)
+  .sort((a, b) => b.data.start.getTime() - a.data.start.getTime());
+
+const monthFmt = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const byMonth = new Map<string, typeof upcoming>();
+for (const e of upcoming) {
+  const key = monthFmt.format(e.data.start);
+  byMonth.set(key, [...(byMonth.get(key) ?? []), e]);
+}
+
+const byYear = new Map<number, typeof past>();
+for (const e of past) {
+  const y = e.data.start.getUTCFullYear();
+  byYear.set(y, [...(byYear.get(y) ?? []), e]);
+}
+const shortDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+
+// schema.org markup so search engines can list upcoming events.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': upcoming.map(({ data }) => ({
+    '@type': 'Event',
+    name: `${site.name} at ${data.title}`,
+    startDate: isoDate(data.start),
+    endDate: isoDate(data.end ?? data.start),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: data.venue,
+      address: { '@type': 'PostalAddress', addressLocality: data.city, addressRegion: data.state, addressCountry: 'US' },
+    },
+    performer: { '@type': 'PerformingGroup', name: site.name },
+    ...(data.url ? { url: data.url } : {}),
+  })),
+};
+---
+
+<Base title="Calendar" description={`Where to see The Sentinels of the Rose perform: upcoming faires, festivals, and public programs in ${site.region}, plus past appearances.`}>
+  <Fragment slot="head">
+    {upcoming.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </Fragment>
+
+  <section class="cal-hero">
+    <div class="container">
+      <p class="eyebrow">Calendar</p>
+      <h1>Where to see us</h1>
+      <p class="cal-hero__lead">
+        Public events where you can watch the Sentinels in person. Come say hello between bouts.
+      </p>
+      <p class="cal-hero__aside">
+        Want us at your own event? See <a href={href('/what-we-offer/')}>what we offer</a> or
+        <a href={href('/book/')}>book us</a>.
+      </p>
+      <p class="notice notice--placeholder">PLACEHOLDER: the dates and venues below are examples until the real schedule is added.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cal">
+      <h2 class="visually-hidden">Upcoming events</h2>
+      {
+        upcoming.length > 0 ? (
+          [...byMonth.entries()].map(([month, events]) => (
+            <div class="cal__month">
+              <h3 class="cal__month-label">{month}</h3>
+              <div class="cal__list">
+                {events.map((event) => (
+                  <EventCard event={event} />
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>
+            Nothing on the calendar right now. Check back soon, or <a href={href('/book/')}>book us</a> for your event.
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  {
+    past.length > 0 && (
+      <section class="section section--paper">
+        <div class="container cal">
+          <div class="section-head">
+            <p class="eyebrow">History</p>
+            <h2>Past appearances</h2>
+          </div>
+          {[...byYear.entries()].map(([year, events]) => (
+            <div class="past">
+              <h3 class="past__year">{year}</h3>
+              <ul class="past__list">
+                {events.map(({ data }) => (
+                  <li class="past__item">
+                    <span class="past__date">
+                      {shortDate.format(data.start)}
+                      {data.end && isoDate(data.end) !== isoDate(data.start) && <>–{shortDate.format(data.end)}</>}
+                    </span>
+                    <span class="past__title">
+                      {data.url ? <a href={data.url} rel="noopener">{data.title}</a> : data.title}
+                    </span>
+                    <span class="past__place">
+                      {data.city}, {data.state} · {eventTypeLabel[data.type]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .cal-hero {
+    background:
+      radial-gradient(ellipse at top, rgba(255, 253, 248, 0.9), transparent 60%),
+      var(--parchment);
+    border-bottom: 1px solid var(--line);
+    padding: clamp(2rem, 5vw, 3.5rem) 0 1.5rem;
+  }
+  .cal-hero__lead {
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    max-width: 42rem;
+  }
+  .cal-hero__aside {
+    color: var(--muted);
+  }
+  /* Keep the list at a readable width, aligned with the page heading. */
+  .cal > * {
+    max-width: 52rem;
+  }
+  .cal__month {
+    margin-bottom: 2.5rem;
+  }
+  .cal__month:last-child {
+    margin-bottom: 0;
+  }
+  .cal__month-label {
+    font-size: 1.6rem;
+    color: var(--rose);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 0.3rem;
+    margin-bottom: 1rem;
+  }
+  .cal__list {
+    display: grid;
+    gap: 1rem;
+  }
+  .past {
+    margin-bottom: 1.75rem;
+  }
+  .past__year {
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .past__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .past__item {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr auto;
+    gap: 0.25rem 1rem;
+    align-items: baseline;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .past__date {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .past__title {
+    font-weight: 600;
+  }
+  .past__place {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    text-align: right;
+  }
+  @media (max-width: 600px) {
+    .past__item {
+      grid-template-columns: 5.5rem 1fr;
+    }
+    .past__place {
+      grid-column: 2;
+      text-align: left;
+    }
+  }
+</style>

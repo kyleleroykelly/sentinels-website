@@ -6,15 +6,18 @@ import sitemap from '@astrojs/sitemap';
 //
 // While hosted at GitHub Pages under Kyle's account the site is served from
 //   https://kyleleroykelly.github.io/sentinels-website/
-// so `site` is the GitHub Pages origin and `base` is the repo name.
+// so SITE is the GitHub Pages origin and BASE is the repo name.
 //
 // When the custom domain is connected, change these two lines to:
-//   site: 'https://sentinelsoftherose.com',
-//   base: '/',
+//   const SITE = 'https://sentinelsoftherose.com';
+//   const BASE = '';
 // and add a `public/CNAME` file containing `sentinelsoftherose.com`.
+const SITE = 'https://kyleleroykelly.github.io';
+const BASE = '/sentinels-website';
+
 export default defineConfig({
-  site: 'https://kyleleroykelly.github.io',
-  base: '/sentinels-website',
+  site: SITE,
+  base: BASE || '/',
 
   trailingSlash: 'always',
   build: { format: 'directory' },
@@ -25,6 +28,13 @@ export default defineConfig({
   image: {
     layout: 'constrained',
     responsiveStyles: true,
+  },
+
+  // The Shows and Events pages were renamed; send old links to the new pages.
+  // Astro doesn't add the base path to redirect targets, so it's added here.
+  redirects: {
+    '/shows/': `${BASE}/what-we-offer/`,
+    '/events/': `${BASE}/calendar/`,
   },
 
   integrations: [sitemap({ filter: (page) => !page.includes('/thanks/') })],

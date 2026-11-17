@@ -29,7 +29,7 @@ const upcoming = (await getCollection('events', ({ data }) => (data.end ?? data.
         </p>
         <p class="hero__actions">
           <a class="btn btn--rose" href={href('/book/')}>Book us for your event</a>
-          <a class="btn btn--ghost" href={href('/events/')}>See upcoming events</a>
+          <a class="btn btn--ghost" href={href('/calendar/')}>See where we'll be</a>
         </p>
       </div>
     </div>
@@ -37,21 +37,25 @@ const upcoming = (await getCollection('events', ({ data }) => (data.end ?? data.
 
   <section class="section section--paper">
     <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Book us</p>
+        <h2>What we offer</h2>
+      </div>
       <div class="grid grid--3">
         <div class="card">
           <h3>Faires and festivals</h3>
           <p>PLACEHOLDER. Narrated stage shows with armored fighters, period weapons, and audience participation.</p>
-          <a href={href('/shows/#faire')}>Stage shows</a>
+          <a href={href('/what-we-offer/#faire')}>Faire and festival shows</a>
         </div>
         <div class="card">
           <h3>Libraries</h3>
           <p>PLACEHOLDER. Hands-on programs about medieval and Tudor arms and armor for all ages.</p>
-          <a href={href('/shows/#library')}>Library programs</a>
+          <a href={href('/what-we-offer/#library')}>Library programs</a>
         </div>
         <div class="card">
           <h3>Schools</h3>
           <p>PLACEHOLDER. Living-history visits that tie into history and literature units.</p>
-          <a href={href('/shows/#school')}>School programs</a>
+          <a href={href('/what-we-offer/#school')}>School programs</a>
         </div>
       </div>
     </div>
@@ -60,8 +64,8 @@ const upcoming = (await getCollection('events', ({ data }) => (data.end ?? data.
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">Where to find us</p>
-        <h2>Upcoming events</h2>
+        <p class="eyebrow">Calendar</p>
+        <h2>Where to see us next</h2>
       </div>
       {
         upcoming.length > 0 ? (
@@ -75,7 +79,7 @@ const upcoming = (await getCollection('events', ({ data }) => (data.end ?? data.
         )
       }
       <p class="more">
-        <a href={href('/events/')}>All events and past appearances &rarr;</a>
+        <a href={href('/calendar/')}>Full calendar and past appearances &rarr;</a>
       </p>
     </div>
   </section>

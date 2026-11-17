@@ -1,0 +1,251 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { href } from '../lib/util';
+
+// "What We Offer" is the menu of shows and programs people can book.
+// It never lists dates; public appearances live on the Calendar page.
+
+const shows = (await getCollection('shows')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(shows.map((s) => render(s)));
+
+const groups = [
+  { id: 'faire', title: 'Faires and festivals', short: 'Faires and festivals', intro: 'PLACEHOLDER. Stage and arena shows built for a crowd.' },
+  { id: 'library', title: 'Library programs', short: 'Libraries', intro: 'PLACEHOLDER. Hands-on history for patrons of all ages.' },
+  { id: 'school', title: 'School programs', short: 'Schools', intro: 'PLACEHOLDER. Living-history visits that fit a class period or an assembly.' },
+  { id: 'private', title: 'Private events', short: 'Private events', intro: 'PLACEHOLDER. Weddings, birthdays, corporate events, and more.' },
+] as const;
+
+const withContent = shows.map((s, i) => ({ s, Content: rendered[i].Content }));
+const groupsWithShows = groups
+  .map((g) => ({ ...g, items: withContent.filter(({ s }) => s.data.audience === g.id) }))
+  .filter((g) => g.items.length > 0);
+
+const requestHref = (title: string, audience: string) =>
+  `${href('/book/')}?show=${encodeURIComponent(title)}&type=${audience}`;
+---
+
+<Base title="What We Offer" description="Shows and programs you can book from The Sentinels of the Rose: armored combat for renaissance faires and festivals, plus library, school, and private-event programs.">
+  <section class="offer-hero">
+    <div class="container">
+      <p class="eyebrow">Book the Sentinels</p>
+      <h1>What we offer</h1>
+      <p class="offer-hero__lead">
+        Shows and programs you can book for your faire, library, school, or private event. PLACEHOLDER: every booking
+        is tailored to the venue, so mix and match or tell us what you have in mind.
+      </p>
+      <p class="offer-hero__aside">
+        Looking for a public event where you can watch us? See the <a href={href('/calendar/')}>calendar</a>.
+      </p>
+
+      <nav class="audience-menu" aria-label="Jump to a type of event">
+        {
+          groupsWithShows.map((g) => (
+            <a class="audience-menu__item" href={`#${g.id}`}>
+              <span class="audience-menu__title">{g.short}</span>
+              <span class="audience-menu__count">
+                {g.items.length} {g.items.length === 1 ? 'program' : 'programs'}
+              </span>
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {
+        groupsWithShows.map((g) => (
+          <div class="show-group" id={g.id}>
+            <div class="show-group__head">
+              <h2>{g.title}</h2>
+              <p>{g.intro}</p>
+            </div>
+            <div class="grid grid--2">
+              {g.items.map(({ s, Content }) => (
+                <article class="card show">
+                  <h3>{s.data.title}</h3>
+                  <p class="show__summary">{s.data.summary}</p>
+                  <dl class="facts">
+                    <dt>Length</dt>
+                    <dd>{s.data.length}</dd>
+                    <dt>Space</dt>
+                    <dd>{s.data.space}</dd>
+                    <dt>Setting</dt>
+                    <dd>{s.data.setting}</dd>
+                    <dt>Audience</dt>
+                    <dd>{s.data.audienceSize}</dd>
+                  </dl>
+                  <div class="show__body">
+                    <Content />
+                  </div>
+                  <p class="show__action">
+                    <a class="btn btn--rose" href={requestHref(s.data.title, s.data.audience)}>
+                      Request this show
+                    </a>
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Booking</p>
+        <h2>How booking works</h2>
+      </div>
+      <ol class="steps">
+        <li class="steps__item">
+          <span class="steps__num" aria-hidden="true">1</span>
+          <h3>Tell us about your event</h3>
+          <p>Send the date, place, and audience through the <a href={href('/book/')}>booking form</a>.</p>
+        </li>
+        <li class="steps__item">
+          <span class="steps__num" aria-hidden="true">2</span>
+          <h3>Get a quote</h3>
+          <p>
+            We reply within a few days with availability and pricing. Rates depend on show length, number of fighters,
+            and travel.
+          </p>
+        </li>
+        <li class="steps__item">
+          <span class="steps__num" aria-hidden="true">3</span>
+          <h3>We arrive armored</h3>
+          <p>PLACEHOLDER. We bring our own equipment and set up in the space you have.</p>
+        </li>
+      </ol>
+      <p class="steps__cta">
+        <a class="btn btn--rose" href={href('/book/')}>Contact us for pricing</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .offer-hero {
+    background:
+      radial-gradient(ellipse at top, rgba(255, 253, 248, 0.9), transparent 60%),
+      var(--parchment);
+    border-bottom: 1px solid var(--line);
+    padding: clamp(2rem, 5vw, 3.5rem) 0;
+  }
+  .offer-hero__lead {
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    max-width: 42rem;
+  }
+  .offer-hero__aside {
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+  }
+  .audience-menu {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  }
+  .audience-menu__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.25rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--blue);
+    border-radius: var(--radius);
+    text-decoration: none;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .audience-menu__item:hover {
+    border-left-color: var(--rose);
+    transform: translateY(-1px);
+  }
+  .audience-menu__title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--blue-deep);
+    line-height: 1.1;
+  }
+  .audience-menu__count {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .show-group {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 6rem;
+  }
+  .show-group:last-child {
+    margin-bottom: 0;
+  }
+  .show-group__head {
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .show-group__head p {
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .show {
+    display: flex;
+    flex-direction: column;
+  }
+  .show__summary {
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+  }
+  .show__body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .show__action {
+    margin: auto 0 0;
+    padding-top: 1.25rem;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+  .steps__item {
+    position: relative;
+    padding-left: 3.5rem;
+  }
+  .steps__num {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: var(--blue);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+  }
+  .steps__item h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.25rem;
+  }
+  .steps__item p {
+    margin: 0;
+  }
+  .steps__cta {
+    margin: 2rem 0 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .audience-menu__item {
+      transition: none;
+    }
+  }
+</style>
