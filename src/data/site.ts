@@ -21,7 +21,7 @@ export const site = {
   // Booking form. Create a free key at https://web3forms.com using the group
   // email, then paste it here. While it is empty the form is shown but not
   // connected, and visitors are pointed to the email address instead.
-  web3formsKey: '' /* PLACEHOLDER */,
+  web3formsKey: '0d1f95e5-acea-4e41-839f-b22fe72387d5',
 
   // Photo credit shown in the gallery.
   photoCredit: {
