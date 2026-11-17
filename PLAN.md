@@ -1,6 +1,6 @@
 # The Sentinels of the Rose — Website Plan
 
-Status: plan approved in principle, repo created, no site code yet. Written 2026-11-16, updated the same day with Kyle's answers.
+Status (2026-11-17): Phases 1 through 6 are built with placeholder text, and the site deploys to GitHub Pages. Real content, gallery photos, social links, and the booking form key are still to come. See MAINTENANCE.md for how to add each. Written 2026-11-16 and updated as work progressed.
 
 ## 0. Decisions so far
 
@@ -104,9 +104,11 @@ Design direction:
 3. Collect the content in section 5 into a `content/` folder in this project.
 
 ### Phase 1 — Skeleton and deploy
-4. Scaffold the Astro project with the page list above as placeholder pages.
-5. Add the GitHub Actions workflow that builds and deploys to GitHub Pages.
-6. Push and confirm the placeholder site is live at `https://<org>.github.io/sentinels-website/`.
+4. ~~Scaffold the Astro project~~ Done (Astro 7, all pages with placeholder text).
+5. ~~Add the GitHub Actions workflow~~ Done, including a weekly Monday rebuild.
+6. ~~Push and go live~~ Done: https://kyleleroykelly.github.io/sentinels-website/
+
+Phases 2 through 6 are also built: brand assets, layout, all pages, events and shows as content files, photo grid with lightbox, video embeds, and the booking form (waiting on a Web3Forms key). Gallery photos were not added: the photographer's gallery does not offer visitor downloads, so the files need to come from Kyle or the photographer.
 
 ### Phase 2 — Design system
 7. Prepare logo assets: clean files, horizontal lockup, favicon, share image.

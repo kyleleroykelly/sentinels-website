@@ -1,0 +1,114 @@
+---
+import { site } from '../data/site';
+import { absolute } from '../lib/util';
+
+const connected = Boolean(site.web3formsKey);
+const redirect = absolute('/thanks/', Astro.site);
+---
+
+{
+  !connected && (
+    <div class="notice notice--placeholder">
+      <strong>The booking form is not connected yet.</strong> Until it is, please email us directly at
+      <a href={`mailto:${site.email}`}>{site.email}</a> with the details below. (Site maintainer: add a Web3Forms key in
+      <code>src/data/site.ts</code> to activate the form.)
+    </div>
+  )
+}
+
+<form class="booking" action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value={site.web3formsKey} />
+  <input type="hidden" name="subject" value="New gig request from the website" />
+  <input type="hidden" name="from_name" value="Sentinels of the Rose website" />
+  <input type="hidden" name="redirect" value={redirect} />
+  <!-- Honeypot: real visitors never see or fill this. -->
+  <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" />
+
+  <div class="form-grid">
+    <div class="field">
+      <label for="name">Your name</label>
+      <input id="name" name="name" type="text" required autocomplete="name" />
+    </div>
+    <div class="field">
+      <label for="organization">Organization or event</label>
+      <input id="organization" name="organization" type="text" autocomplete="organization" />
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required autocomplete="email" />
+    </div>
+    <div class="field">
+      <label for="phone">Phone <small>(optional)</small></label>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" />
+    </div>
+    <div class="field">
+      <label for="event_type">Type of event</label>
+      <select id="event_type" name="event_type" required>
+        <option value="">Choose one</option>
+        <option>Renaissance faire or festival</option>
+        <option>Library program</option>
+        <option>School program</option>
+        <option>Private event</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="dates">Date or dates</label>
+      <input id="dates" name="dates" type="text" placeholder="e.g. June 6–7, 2027" required />
+    </div>
+    <div class="field">
+      <label for="location">Location <small>(city and venue)</small></label>
+      <input id="location" name="location" type="text" required />
+    </div>
+    <div class="field">
+      <label for="audience">Expected audience size</label>
+      <input id="audience" name="audience" type="text" placeholder="e.g. 50–100" />
+    </div>
+    <div class="field">
+      <label for="setting">Indoors or outdoors?</label>
+      <select id="setting" name="setting">
+        <option value="">Not sure yet</option>
+        <option>Outdoors</option>
+        <option>Indoors</option>
+        <option>Both</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="budget">Budget <small>(optional)</small></label>
+      <input id="budget" name="budget" type="text" />
+    </div>
+    <div class="field field--full">
+      <label for="message">Tell us about the event</label>
+      <textarea id="message" name="message" required placeholder="What kind of show are you looking for? How many sets? Anything else we should know?"></textarea>
+    </div>
+  </div>
+
+  <p class="booking__actions">
+    <button class="btn btn--rose" type="submit" disabled={!connected} aria-disabled={!connected}>
+      Send request
+    </button>
+    <span class="booking__alt">
+      or email <a href={`mailto:${site.email}`}>{site.email}</a>
+    </span>
+  </p>
+</form>
+
+<style>
+  .booking {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    box-shadow: var(--shadow);
+  }
+  .booking__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0 0;
+  }
+  .booking__alt {
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { href } from '../lib/util';
+---
+
+<Base title="Thank You" description="Your booking request was sent.">
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+  </Fragment>
+  <section class="section">
+    <div class="container thanks">
+      <p class="eyebrow">Request sent</p>
+      <h1>Thank you!</h1>
+      <p>
+        Your request is on its way to the Sentinels. We will reply from <strong>{site.email}</strong> within a few
+        days. If you don't hear from us, check your spam folder or email us directly.
+      </p>
+      <p>
+        <a class="btn" href={href('/')}>Back to the home page</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thanks {
+    max-width: 40rem;
+    text-align: center;
+    padding-top: 2rem;
+  }
+</style>

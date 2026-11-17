@@ -1,0 +1,149 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EventCard from '../components/EventCard.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import logo from '../assets/logo/logo-black.png';
+import { site } from '../data/site';
+import { photos } from '../data/gallery';
+import { href, today } from '../lib/util';
+
+const now = today();
+const upcoming = (await getCollection('events', ({ data }) => (data.end ?? data.start) >= now))
+  .sort((a, b) => a.data.start.getTime() - b.data.start.getTime())
+  .slice(0, 3);
+---
+
+<Base>
+  <section class="hero">
+    <div class="container hero__inner">
+      <Image src={logo} alt={site.name} width={520} widths={[320, 520, 800]} sizes="(max-width: 700px) 80vw, 520px" class="hero__logo" loading="eager" />
+      <div class="hero__text">
+        <p class="eyebrow">{site.region}</p>
+        <h1>Steel, story, and spectacle.</h1>
+        <p class="hero__lead">
+          PLACEHOLDER. The Sentinels of the Rose bring full-contact armored sword combat to renaissance faires and
+          festivals, and living-history presentations to libraries and schools across southwest Michigan and northern
+          Indiana.
+        </p>
+        <p class="hero__actions">
+          <a class="btn btn--rose" href={href('/book/')}>Book us for your event</a>
+          <a class="btn btn--ghost" href={href('/events/')}>See upcoming events</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="grid grid--3">
+        <div class="card">
+          <h3>Faires and festivals</h3>
+          <p>PLACEHOLDER. Narrated stage shows with armored fighters, period weapons, and audience participation.</p>
+          <a href={href('/shows/#faire')}>Stage shows</a>
+        </div>
+        <div class="card">
+          <h3>Libraries</h3>
+          <p>PLACEHOLDER. Hands-on programs about medieval and Tudor arms and armor for all ages.</p>
+          <a href={href('/shows/#library')}>Library programs</a>
+        </div>
+        <div class="card">
+          <h3>Schools</h3>
+          <p>PLACEHOLDER. Living-history visits that tie into history and literature units.</p>
+          <a href={href('/shows/#school')}>School programs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Where to find us</p>
+        <h2>Upcoming events</h2>
+      </div>
+      {
+        upcoming.length > 0 ? (
+          <div class="grid grid--3">
+            {upcoming.map((event) => (
+              <EventCard event={event} compact />
+            ))}
+          </div>
+        ) : (
+          <p>No events scheduled right now. Check back soon, or <a href={href('/book/')}>book us</a> for yours.</p>
+        )
+      }
+      <p class="more">
+        <a href={href('/events/')}>All events and past appearances &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Gallery</p>
+        <h2>From the field</h2>
+      </div>
+      <PhotoGrid photos={photos} limit={6} />
+      <p class="more">
+        <a href={href('/gallery/')}>More photos and video &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta">
+      <h2>Bring the Sentinels to your event</h2>
+      <p>
+        PLACEHOLDER. Tell us the date, the place, and the crowd, and we will put together a show that fits.
+      </p>
+      <a class="btn btn--rose" href={href('/book/')}>Request a booking</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    background:
+      radial-gradient(ellipse at top, rgba(255, 253, 248, 0.9), transparent 60%),
+      var(--parchment);
+    border-bottom: 1px solid var(--line);
+    padding: clamp(2rem, 5vw, 4rem) 0;
+  }
+  .hero__inner {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 820px) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    }
+  }
+  .hero__logo {
+    width: min(100%, 520px);
+    height: auto;
+    margin: 0 auto;
+  }
+  .hero__lead {
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    max-width: 36rem;
+  }
+  .hero__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .more {
+    margin-top: 1.5rem;
+    font-weight: 600;
+  }
+  .cta {
+    text-align: center;
+    max-width: 40rem;
+  }
+</style>

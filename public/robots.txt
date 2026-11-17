@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kyleleroykelly.github.io/sentinels-website/sitemap-index.xml

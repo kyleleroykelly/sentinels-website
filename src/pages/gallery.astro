@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import { site } from '../data/site';
+import { photos, videos } from '../data/gallery';
+---
+
+<Base title="Gallery" description="Photos and video of The Sentinels of the Rose in armored combat at faires, festivals, and events.">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Gallery</p>
+        <h1>Photos</h1>
+        <p>
+          Photography by <a href={site.photoCredit.url} rel="noopener">{site.photoCredit.name}</a> unless noted.
+          {site.fullAlbumUrl && <span> See the <a href={site.fullAlbumUrl} rel="noopener">full album</a> for more.</span>}
+        </p>
+      </div>
+      <PhotoGrid photos={photos} />
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Watch</p>
+        <h2>Video</h2>
+      </div>
+      {
+        videos.length > 0 ? (
+          <div class="grid grid--2">
+            {videos.map((v) => (
+              <figure class="video">
+                <div class="video__frame">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${v.id}`}
+                    title={v.title}
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                <figcaption>{v.title}</figcaption>
+              </figure>
+            ))}
+          </div>
+        ) : (
+          <div class="placeholder-box">
+            <p>
+              <strong>Video coming soon.</strong>
+              <br />
+              Add YouTube video ids to <code>src/data/gallery.ts</code> to embed them here.
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .video {
+    margin: 0;
+  }
+  .video__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--night);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .video__frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .video figcaption {
+    margin-top: 0.5rem;
+    color: var(--ink-soft);
+  }
+</style>

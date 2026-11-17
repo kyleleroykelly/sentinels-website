@@ -1,0 +1,136 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import logoDistressed from '../assets/logo/logo-distressed-black.png';
+import { site } from '../data/site';
+import { members } from '../data/members';
+import { href } from '../lib/util';
+---
+
+<Base title="About" description={`Who The Sentinels of the Rose are, how we fight, and where we perform. ${site.region}.`}>
+  <section class="section">
+    <div class="container about">
+      <div class="prose">
+        <p class="eyebrow">About the group</p>
+        <h1>Who we are</h1>
+        <p>
+          PLACEHOLDER. The Sentinels of the Rose are an armored combat performance group founded in {site.founded}.
+          Write two or three paragraphs here: how the group started, who founded it, what draws you to armored
+          fighting, and what makes a Sentinels show different.
+        </p>
+        <p>
+          PLACEHOLDER. We fight in steel: full plate and mail over padded gambesons, with blunted historical weapons.
+          Describe the style of combat, the historical period you draw from, and the balance between sport, theater,
+          and history in a show.
+        </p>
+
+        <h2>Safety first</h2>
+        <p>
+          PLACEHOLDER. Describe your safety practices: the armor standards you fight in, how weapons are prepared,
+          the distance you keep from the audience, and how fights are supervised. Organizers and parents read this
+          section closely.
+        </p>
+
+        <h2>Where we perform</h2>
+        <p>
+          PLACEHOLDER. We are based in {site.region} and regularly appear at renaissance faires and festivals in the
+          region. List the faires you return to each year and the libraries and schools you have visited.
+        </p>
+      </div>
+      <aside class="about__aside">
+        <Image src={logoDistressed} alt="" width={420} class="about__logo" />
+        <div class="card">
+          <h3>At a glance</h3>
+          <dl class="facts">
+            <dt>Founded</dt>
+            <dd>{site.founded} (PLACEHOLDER)</dd>
+            <dt>Based in</dt>
+            <dd>{site.region}</dd>
+            <dt>Style</dt>
+            <dd>Armored sword combat</dd>
+            <dt>Booking</dt>
+            <dd><a href={href('/book/')}>Request a show</a></dd>
+          </dl>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">The fighters</p>
+        <h2>Meet the Sentinels</h2>
+        <p>Every fighter carries their own colors into the lists. (PLACEHOLDER roster: names, bios, and photos to come.)</p>
+      </div>
+      <ul class="roster">
+        {
+          members.map((m) => (
+            <li class="card member">
+              <div class="member__colors" style={`--c1:${m.colors[0]};--c2:${m.colors[1]}`} aria-hidden="true"></div>
+              <div class="member__photo placeholder-box">Photo coming soon</div>
+              <h3 class="member__name">{m.name}</h3>
+              <p class="member__role">{m.role}</p>
+              <p class="member__bio">{m.bio}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .about {
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .about {
+      grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+    }
+  }
+  .about__logo {
+    width: 100%;
+    height: auto;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  .roster {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+  .member {
+    padding-top: 0;
+    overflow: hidden;
+  }
+  .member__colors {
+    height: 10px;
+    margin: 0 -1.5rem 1.25rem;
+    background: linear-gradient(90deg, var(--c1) 0 50%, var(--c2) 50% 100%);
+  }
+  .member__photo {
+    min-height: 10rem;
+    margin-bottom: 1rem;
+  }
+  .member__name {
+    margin-bottom: 0;
+  }
+  .member__role {
+    color: var(--rose);
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .member__bio {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+</style>

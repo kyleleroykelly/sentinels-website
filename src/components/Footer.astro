@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+import logoWhite from '../assets/logo/logo-white.png';
+import { site, nav } from '../data/site';
+import { href } from '../lib/util';
+
+const socials = site.socials.filter((s) => s.url);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <Image src={logoWhite} alt={site.name} width={220} class="site-footer__logo" />
+      <p>{site.region}</p>
+    </div>
+
+    <div>
+      <h2 class="site-footer__heading">Pages</h2>
+      <ul class="site-footer__list">
+        {nav.map((item) => <li><a href={href(item.path)}>{item.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="site-footer__heading">Contact</h2>
+      <ul class="site-footer__list">
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        {socials.map((s) => <li><a href={s.url} rel="noopener">{s.name}</a></li>)}
+        {socials.length === 0 && <li class="site-footer__muted">Social links coming soon</li>}
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__legal">
+    <p>&copy; {year} {site.name}. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--night);
+    color: #d8d3c6;
+    margin-top: 3rem;
+    padding: 3rem 0 1.5rem;
+  }
+  .site-footer__inner {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    align-items: start;
+  }
+  .site-footer__logo {
+    width: 220px;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.75rem;
+  }
+  .site-footer__heading {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .site-footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .site-footer__list li {
+    margin: 0.3rem 0;
+  }
+  .site-footer a {
+    color: #e6e1d4;
+  }
+  .site-footer a:hover {
+    color: var(--gold);
+  }
+  .site-footer__muted {
+    color: #8b8679;
+  }
+  .site-footer__legal {
+    border-top: 1px solid #2b2f38;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    font-size: 0.95rem;
+    color: #a09a8c;
+  }
+  .site-footer__legal p {
+    margin: 0;
+  }
+</style>

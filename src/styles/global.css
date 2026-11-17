@@ -1,0 +1,362 @@
+/* ------------------------------------------------------------------
+   The Sentinels of the Rose — global styles
+   Light parchment look, blue and white group colors, rose-red accent.
+   ------------------------------------------------------------------ */
+
+:root {
+  --parchment: #f3ead7;
+  --parchment-deep: #e8dcc0;
+  --paper: #fffdf8;
+  --ink: #1c1a17;
+  --ink-soft: #4a443b;
+  --muted: #6b6457;
+  --line: #d6c9a8;
+  --blue: #1f3b63;
+  --blue-deep: #142a49;
+  --blue-soft: #e3e9f2;
+  --rose: #9b1c2e;
+  --gold: #b08d3c;
+  --night: #15181f;
+
+  --font-display: 'Grenze Gotisch', 'Times New Roman', serif;
+  --font-body: 'EB Garamond', Georgia, 'Times New Roman', serif;
+
+  --radius: 6px;
+  --shadow: 0 1px 2px rgba(28, 26, 23, 0.08), 0 8px 24px rgba(28, 26, 23, 0.08);
+  --max: 72rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+img,
+picture,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--blue-deep);
+  margin: 0 0 0.5em;
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+}
+h2 {
+  font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+}
+h3 {
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--blue);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  color: var(--rose);
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  background: var(--blue);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 100;
+  border-radius: var(--radius);
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Layout ---------------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+}
+
+.section--paper {
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.section-head {
+  max-width: 40rem;
+  margin-bottom: 2rem;
+}
+.section-head p {
+  color: var(--ink-soft);
+  font-size: 1.15rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+.grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}
+.grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+}
+
+.prose {
+  max-width: 44rem;
+}
+.prose h2 {
+  margin-top: 1.5em;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.3em;
+}
+
+/* Buttons --------------------------------------------------------- */
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+.btn:hover {
+  background: var(--blue-deep);
+  border-color: var(--blue-deep);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--blue);
+}
+.btn--ghost:hover {
+  background: var(--blue);
+  color: #fff;
+}
+.btn--rose {
+  background: var(--rose);
+  border-color: var(--rose);
+}
+.btn--rose:hover {
+  background: #7d1625;
+  border-color: #7d1625;
+}
+.btn[disabled],
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Cards ----------------------------------------------------------- */
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+.card h3 {
+  margin-top: 0;
+}
+
+.notice {
+  background: var(--blue-soft);
+  border-left: 4px solid var(--blue);
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+.notice--placeholder {
+  background: #fbf1d8;
+  border-left-color: var(--gold);
+  font-size: 1rem;
+}
+
+.placeholder-box {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--parchment-deep) 0 10px,
+    var(--parchment) 10px 20px
+  );
+  border: 1px dashed var(--gold);
+  border-radius: var(--radius);
+  color: var(--muted);
+  padding: 2rem 1rem;
+  min-height: 12rem;
+  font-size: 1rem;
+}
+
+/* Ornament -------------------------------------------------------- */
+
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--gold);
+  margin: 2rem 0;
+}
+.rule::before,
+.rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* Tables / definition lists --------------------------------------- */
+
+.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1rem;
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+.facts dt {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  padding-top: 0.2rem;
+}
+.facts dd {
+  margin: 0;
+}
+
+/* Forms ----------------------------------------------------------- */
+
+.form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.field--full {
+  grid-column: 1 / -1;
+}
+.field label {
+  font-weight: 600;
+}
+.field small {
+  color: var(--muted);
+}
+.field input,
+.field select,
+.field textarea {
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #b9ad90;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--blue);
+  outline: 3px solid rgba(31, 59, 99, 0.25);
+}
+.field textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .btn {
+    transition: none;
+  }
+}
