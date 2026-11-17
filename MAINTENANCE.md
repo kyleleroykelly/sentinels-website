@@ -64,6 +64,22 @@ Credit the photographer. The gallery page already credits Mitch Colagrossi Photo
 
 Upload the video to YouTube. Then add its id (the part after `v=` in the link) to the `videos` list in `src/data/gallery.ts`.
 
+Don't put video files in this repo. See the limits below.
+
+## Size limits to keep in mind
+
+| Limit | Amount |
+|---|---|
+| Whole published site | 1 GB |
+| Whole repo, recommended | under 1 GB |
+| Any single file | 100 MB hard block, warning at 50 MB |
+| Upload through the github.com website | 25 MB per file |
+| Visitor bandwidth | about 100 GB per month (soft limit) |
+
+`npm run photos` shrinks each photo to roughly 100–500 KB, so a few hundred photos fit comfortably. It also strips camera metadata, including any GPS location. Everything in this repo is public, and deleted files stay in the Git history forever, so only commit the web-sized copies.
+
+GitHub Pages also may not be used to run an online store or a site whose main purpose is commercial transactions. Advertising the group and taking booking requests is fine. If you add merch later, link out to a store such as Etsy or Square rather than selling on this site.
+
 ## Update contact info and social links
 
 All in `src/data/site.ts`: email, Facebook and Instagram links, the booking form key, founding year, and the full-album link.
